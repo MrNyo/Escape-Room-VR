@@ -6,37 +6,34 @@ public class SimonSays : MonoBehaviour
     [SerializeField] private GameObject[] buttons;
 
     private int[] buttonsToHit = new int[5];
-    int _counter;
+    int _counter = 0;
     // Start is called before the first frame update
     void Start()
     {
-        
-        //Renderer buttonRenderer = buttons[3].GetComponent<Renderer>();
-        //buttonRenderer.material.SetColor("_Color",Color.green);
         for (int i = 0; i < 5; i++)
         {
             buttonsToHit[i] = Random.Range(0, 9);
         }
-
-        for (int i = 0; i < 5; i++)
-        {
-            StartCoroutine(TurnColorButton(buttonsToHit[i]));
-        }
-    }
-
-    
-    // Update is called once per frame
-    void Update()
-    {
-        Debug.Log(Time.deltaTime);
         
+        StartCoroutine(TurnColorButton(buttonsToHit));
     }
-    
-    IEnumerator TurnColorButton(int i)
+
+    public void ButtonPressed(int id)
     {
-        yield return new WaitForSeconds(1f);
-        Renderer buttonRenderer = buttons[i].GetComponent<Renderer>();
+        Debug.Log(id);
+    }
+
+    IEnumerator TurnColorButton(int [] i)
+    {
+        Renderer buttonRenderer = buttons[i[_counter]].GetComponent<Renderer>();
         buttonRenderer.material.SetColor("_Color",Color.green);
+        yield return new WaitForSeconds(1f);
+        buttonRenderer.material.SetColor("_Color",Color.white);
+        _counter++;
+        if (_counter < 5)
+        {
+            StartCoroutine(TurnColorButton(buttonsToHit)); 
+        }
         
     }
 }

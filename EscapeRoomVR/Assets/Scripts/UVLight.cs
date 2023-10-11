@@ -15,7 +15,7 @@ public class UVLight : MonoBehaviour
         letter = GameObject.FindGameObjectWithTag("Finish");
         letter.SetActive(false);
         uvSpotLight = uvLight.GetComponent<Light>();
-        Debug.Log(uvSpotLight.spotAngle);
+        //Debug.Log(uvSpotLight.spotAngle);
     }
 
     void Update()
