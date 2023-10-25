@@ -9,6 +9,7 @@ public class SimonSays : MonoBehaviour
     [SerializeField] private GameObject[] buttons;
     [SerializeField] private TextMeshPro textBox;
     private int[] buttonsToHit = new int[5];
+    
     int _counter = 0;
 
     private int _buttonInputCounter = 0;
@@ -22,8 +23,16 @@ public class SimonSays : MonoBehaviour
             buttonsToHit[i] = Random.Range(0, 9);
         }
         
-        StartCoroutine(TurnColorButton(buttonsToHit));
+        //StartCoroutine(TurnColorButton(buttonsToHit));
     }
+
+    public void start()
+    {
+        StartCoroutine(TurnColorButton(buttonsToHit));
+         _counter = 0;
+
+         _buttonInputCounter = 0;
+}
 
     public void ButtonPressed(int id)
     {
@@ -34,15 +43,21 @@ public class SimonSays : MonoBehaviour
         }
         else
         {
-            for (int i = 0; i < 5; i++)
+            if(_buttonInputCounter == 5)
+            if(_buttonInputCounter == 5)
             {
-                textBox.text += buttonsToHit[i];
+                for (int i = 0; i < 5; i++)
+                {
+                    textBox.text += buttonsToHit[i];
+                }
+                textBox.text += "<br>";
+                for (int i = 0; i < 5; i++)
+                {
+                    textBox.text += _buttonInput[i];
+                }
+                _buttonInputCounter++;
             }
-            textBox.text += "/n";
-            for (int i = 0; i < 5; i++)
-            {
-                textBox.text += _buttonInput[i];
-            }
+            
         }
     }
 
