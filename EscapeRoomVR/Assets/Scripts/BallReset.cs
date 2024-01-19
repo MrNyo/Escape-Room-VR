@@ -7,7 +7,7 @@ namespace DefaultNamespace
 
     {
         [SerializeField] private Transform ballStart;
-        [SerializeField] private Transform labyrinthItself;
+        [SerializeField] private Transform keySpawnPosition;
         [SerializeField] private GameObject key;
 
         private void OnTriggerEnter(Collider other)
@@ -17,7 +17,7 @@ namespace DefaultNamespace
             {
                 if (transform.name == "Finish")
                 {
-                    Instantiate(key, labyrinthItself.position - new Vector3(0,0.1f,0), Quaternion.identity);
+                    Instantiate(key, keySpawnPosition.position, Quaternion.identity);
                     Destroy(other);
                 }
                 else

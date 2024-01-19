@@ -7,6 +7,8 @@ public class SimonSays : MonoBehaviour
 {
     //[SerializeField] private GameObject[] buttons;
     [SerializeField] private GameObject[] displayField;
+    [SerializeField] private Transform keySpawnPosition;
+    [SerializeField] private GameObject key;
     private IEnumerator _colorCoroutine;
 
     private bool _coroutineRunning = false;
@@ -94,7 +96,7 @@ public class SimonSays : MonoBehaviour
 
                 if (_rightCombination)
                 {
-                    
+                    Instantiate(key, keySpawnPosition.position, Quaternion.identity);
                 }
                 _buttonInputCounter++;
             }
