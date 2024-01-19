@@ -1,14 +1,14 @@
 using UnityEngine;
 using TMPro;
-namespace DefaultNamespace
-{
+
     public class NumberPad : MonoBehaviour
     {
         [SerializeField] private TextMeshPro numberDisplay;
         [SerializeField] private GameObject key;
+        [SerializeField] private GameObject TEstkey;
         [SerializeField] private Transform keyToSpawn;
         private int _buttonInputCounter = 0;
-        private int[] _rightCombination = { 3, 8, 2 };
+        private int[] _rightCombination = { 2,3,8 };
         private int[] _numberCombination = { 0,0,0 };
         private bool _codeRight = true;
 
@@ -42,19 +42,27 @@ namespace DefaultNamespace
                     }
                     else
                     {
-                        _numberCombination = new int[] { 0,0,0 };
+                        _numberCombination = new [] { 0,0,0 };
                         _buttonInputCounter = 0;
                     }
                     
                 }
             }
         }
+        
+        
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                Instantiate(key, keyToSpawn.position, Quaternion.identity);
+            }
+        }
 
         public void ResetCode()
         {
-            _numberCombination = new int[] { 0,0,0 };
+            _numberCombination = new [] { 0,0,0 };
             _buttonInputCounter = 0;
             _codeRight = true;
         }
     }
-}

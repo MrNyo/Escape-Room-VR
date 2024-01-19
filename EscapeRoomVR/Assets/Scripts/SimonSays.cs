@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -6,10 +7,15 @@ public class SimonSays : MonoBehaviour
 {
     //[SerializeField] private GameObject[] buttons;
     [SerializeField] private GameObject[] displayField;
+    private IEnumerator _colorCoroutine;
+
+    private bool _coroutineRunning = false;
     //[SerializeField] private TextMeshPro textBox;
     private int[] _buttonsToHit = new int[5];
     
     int _counter = 0;
+
+    private int _difficultyCounter;
 
     private int _buttonInputCounter = 0;
 
@@ -21,7 +27,7 @@ public class SimonSays : MonoBehaviour
     {
         RandomizeSimonSayCombination();
         
-        StartCoroutine(TurnColorButton(_buttonsToHit));
+        StartCoroutine(_colorCoroutine);
     }
 
     void RandomizeSimonSayCombination()
@@ -36,15 +42,35 @@ public class SimonSays : MonoBehaviour
             }
             temp = _buttonsToHit[i];
         }
+
+        _colorCoroutine = TurnColorButton(_buttonsToHit);
     }
 
     public void StartSimonSays()
     {
-        //StartCoroutine(TurnColorButton(_buttonsToHit));
-         _counter = 0;
-
-         _buttonInputCounter = 0;
-         RandomizeSimonSayCombination();
+        if (!_coroutineRunning)
+        {
+            _counter = 0;
+            _buttonInputCounter = 0;
+            RandomizeSimonSayCombination();
+            StartCoroutine(_colorCoroutine);
+            _coroutineRunning = true;
+        }
+    }
+    
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            if (!_coroutineRunning)
+            {
+                _counter = 0;
+                _buttonInputCounter = 0;
+                RandomizeSimonSayCombination();
+                StartCoroutine(_colorCoroutine);
+                _coroutineRunning = true;
+            }
+        }
     }
 
     public void ButtonPressed(int id)
@@ -91,6 +117,11 @@ public class SimonSays : MonoBehaviour
         {
             StartCoroutine(TurnColorButton(_buttonsToHit)); 
         }
+        else
+        {
+            _coroutineRunning = false;
+        }
         
     }
+
 }
