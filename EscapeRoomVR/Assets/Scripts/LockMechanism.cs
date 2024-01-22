@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-
 
 public class LockMechanism : MonoBehaviour
 {
@@ -12,13 +10,18 @@ public class LockMechanism : MonoBehaviour
         _lockTrigger = GetComponent<BoxCollider>();
     }
 
+    /**
+     * When the key enters the trigger zone it gets replaced by a static key so it can't be grabbed and
+     * a Event gets triggered
+     */
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Key"))
         {
-            Instantiate(key, transform.position, Quaternion.identity, transform);
-            Destroy(other);
+            Instantiate(key, transform.position, Quaternion.Euler(-90,90,0), transform);
+            Destroy(other.gameObject);
             _lockTrigger.enabled = false;
+            GameEvents.current.KeyEnter();
         }
     }
 }

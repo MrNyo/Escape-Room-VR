@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ResetBox : MonoBehaviour
 {
+    /**
+     * For when the key or the labyrinth should fall out of the room they get reset into the middle of the room
+     */
     void OnTriggerExit(Collider other)
     {
         if(other.CompareTag("Key") || other.CompareTag("Labyrinth"))
