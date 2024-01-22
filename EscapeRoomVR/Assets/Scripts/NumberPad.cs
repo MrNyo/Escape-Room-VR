@@ -12,10 +12,11 @@ public class NumberPad : MonoBehaviour
     private int[] _rightCombination = { 2, 3, 8 };
     private int[] _numberCombination = { 0, 0, 0 };
     private bool _codeRight = true;
+    private bool _challengeWon = false;
 
     private void Start()
     {
-        spotlight.transform.rotation = Quaternion.Euler(0,84,0);
+        //spotlight.transform.rotation = Quaternion.Euler(0,84,0);
     }
 
     /**
@@ -36,8 +37,6 @@ public class NumberPad : MonoBehaviour
 
             _buttonInputCounter++;
         }
-        else
-        {
             if (_buttonInputCounter == 3)
             {
                 for (int i = 0; i < 3; i++)
@@ -48,10 +47,11 @@ public class NumberPad : MonoBehaviour
                     }
                 }
 
-                if (_codeRight)
+                if (_codeRight && !_challengeWon)
                 {
                     GameEvents.current.SoundPlayed(SoundTypes.ChallengeWon);
                     Instantiate(key, keyToSpawn.position - new Vector3(0, 0.1f, 0), Quaternion.identity);
+                    _challengeWon = true;
                     _buttonInputCounter++;
                 }
                 else
@@ -60,7 +60,7 @@ public class NumberPad : MonoBehaviour
                     ResetCode();
                 }
             }
-        }
+        
     }
 
     /**

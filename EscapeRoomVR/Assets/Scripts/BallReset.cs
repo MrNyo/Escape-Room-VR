@@ -6,6 +6,7 @@ public class BallReset : MonoBehaviour
     [SerializeField] private Transform ballStart;
     [SerializeField] private Transform keySpawnPosition;
     [SerializeField] private GameObject key;
+    bool _challengeWon = false;
 
     /**
     * Reacting to the ball "falling" into a hole
@@ -16,10 +17,11 @@ public class BallReset : MonoBehaviour
     {
         if (other.CompareTag("Ball"))
         {
-            if (transform.name == "Finish")
+            if (transform.name == "Finish" && !_challengeWon)
             {
                 GameEvents.current.SoundPlayed(SoundTypes.ChallengeWon);
                 Instantiate(key, keySpawnPosition.position, Quaternion.identity);
+                _challengeWon = true;
                 Destroy(other.gameObject);
             }
             else

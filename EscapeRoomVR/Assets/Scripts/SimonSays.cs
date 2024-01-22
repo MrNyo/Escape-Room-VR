@@ -25,6 +25,8 @@ public class SimonSays : MonoBehaviour
     private int[] _buttonInput = new int [5];
 
     private bool _rightCombination = true;
+    private bool _challengeWon = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -62,12 +64,18 @@ public class SimonSays : MonoBehaviour
         GameEvents.current.SoundPlayed(SoundTypes.Button);
         if (!_coroutineRunning)
         {
-            _counter = 0;
-            _buttonInputCounter = 0;
-            RandomizeSimonSayCombination();
-            StartCoroutine(_colorCoroutine);
-            _coroutineRunning = true;
+            StartNewRun();
         }
+    }
+
+    void StartNewRun()
+    {
+        _counter = 0;
+        _buttonInputCounter = 0;
+        RandomizeSimonSayCombination();
+        StartCoroutine(_colorCoroutine);
+        _coroutineRunning = true;
+        _rightCombination = true;
     }
 
     /**
@@ -80,45 +88,50 @@ public class SimonSays : MonoBehaviour
     public void ButtonPressed(int id)
     {
         GameEvents.current.SoundPlayed(SoundTypes.Button);
-        if (_buttonInputCounter < _combinationLength)
+        if (_buttonInputCounter < _combinationLength && !_coroutineRunning)
         {
             _buttonInput[_buttonInputCounter] = id;
+
             _buttonInputCounter++;
         }
-        else
+        
+        if (_buttonInputCounter == _combinationLength)
         {
-            if (_buttonInputCounter == _combinationLength)
+            for (int i = 0; i < _combinationLength; i++)
             {
-                for (int i = 0; i < _combinationLength; i++)
+                if (_buttonInput[i] != _buttonsToHit[i])
                 {
-                    if (_buttonInput[i] != _buttonsToHit[i])
-                    {
-                        _rightCombination = false;
-                    }
+                    _rightCombination = false;
                 }
+            }
 
-                if (_rightCombination)
+            if (_rightCombination)
+            {
+                Debug.Log(_rightCombination);
+                Renderer buttonRenderer = difficultyFieldDisplay[_combinationLength - 3].GetComponent<Renderer>();
+                buttonRenderer.material.SetColor("_Color", Color.green);
+                if (_combinationLength == 5 && !_challengeWon)
                 {
-                    Renderer buttonRenderer = difficultyFieldDisplay[_combinationLength - 3].GetComponent<Renderer>();
-                    buttonRenderer.material.SetColor("_Color", Color.green);
-                    if (_combinationLength == 5)
-                    {
-                        GameEvents.current.SoundPlayed(SoundTypes.ChallengeWon);
-                        Instantiate(key, keySpawnPosition.position, Quaternion.identity);
-                    }
-                    else
-                    {
-                        _combinationLength++;
-                    }
+                    GameEvents.current.SoundPlayed(SoundTypes.ChallengeWon);
+                    Instantiate(key, keySpawnPosition.position, Quaternion.identity);
+                    _challengeWon = true;
+                    _buttonInputCounter++;
                 }
                 else
                 {
-                    GameEvents.current.SoundPlayed(SoundTypes.ChallengeFailed);
+                    _combinationLength++;
+                    StartNewRun();
                 }
-
-                _buttonInputCounter++;
+                }
+            else
+            {
+                 GameEvents.current.SoundPlayed(SoundTypes.ChallengeFailed);
+                 StartNewRun();
             }
+
+                
         }
+        
     }
 
     /**

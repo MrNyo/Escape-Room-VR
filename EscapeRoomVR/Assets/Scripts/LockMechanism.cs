@@ -1,3 +1,4 @@
+using Tilia.Interactions.Interactables.Interactables;
 using UnityEngine;
 
 public class LockMechanism : MonoBehaviour
@@ -19,6 +20,7 @@ public class LockMechanism : MonoBehaviour
         if (other.CompareTag("Key"))
         {
             Instantiate(key, transform.position, Quaternion.Euler(-90,90,0), transform);
+            other.gameObject.GetComponent<InteractableFacade>().Ungrab();
             Destroy(other.gameObject);
             _lockTrigger.enabled = false;
             GameEvents.current.KeyEnter();
